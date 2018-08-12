@@ -16,37 +16,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data
-            android:name="com.facebook.accountkit.ApplicationName"
-            android:value="@string/app_name" />
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/fb_app_id" />
-        <meta-data
-            android:name="com.facebook.accountkit.ClientToken"
-            android:value="@string/account_kit_client_token" />
 
-        <activity android:name="com.facebook.accountkit.ui.AccountKitActivity" />
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".EventDetail"
             android:label="@string/title_activity_event_detail"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".MainActivity" />
         <activity android:name=".Groups" />
         <activity android:name=".Events" />
         <activity android:name=".EventsAdd" />
         <activity android:name=".GroupDetail" />
         <activity android:name=".GroupsAdd" />
-        <activity android:name=".Login" />
+        <activity android:name=".Login" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".Verified" />
         <activity android:name=".Account"></activity>
     </application>

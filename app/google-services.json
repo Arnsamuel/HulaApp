@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "289250561430",
+    "firebase_url": "https://hulaapp-2c061.firebaseio.com",
+    "project_id": "hulaapp-2c061",
+    "storage_bucket": "hulaapp-2c061.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289250561430:android:24e544f86a88439d",
+        "android_client_info": {
+          "package_name": "e.aaronsamuel.hulaapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289250561430-q4q4pjiaqbvp3t485qlktm6csd6aobdd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "e.aaronsamuel.hulaapp",
+            "certificate_hash": "c520d3fb9a39707404af672807ce537a0af76391"
+          }
+        },
+        {
+          "client_id": "289250561430-oej56oge13jjs20mibrire3o08v9icma.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAW0gnvZg6-y6j2Xo33RnhDfy7zSyc9kP4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289250561430-oej56oge13jjs20mibrire3o08v9icma.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

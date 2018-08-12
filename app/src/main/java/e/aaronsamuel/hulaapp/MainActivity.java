@@ -17,6 +17,9 @@ import android.view.MenuItem;
 import android.widget.CalendarView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -60,6 +63,16 @@ public class MainActivity extends AppCompatActivity
                 textview.setText(sdf.format(cal.getTime()));
             }
         });
+
+        setupFirebaseDB();
+    }
+
+    public void setupFirebaseDB() {
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("message");
+
+        myRef.setValue("Hello, World!");
     }
 
     @Override
