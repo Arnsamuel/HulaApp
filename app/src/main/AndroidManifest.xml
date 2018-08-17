@@ -16,25 +16,35 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".EventDetail"
             android:label="@string/title_activity_event_detail"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".Groups" />
-        <activity android:name=".Events" />
-        <activity android:name=".EventsAdd" />
-        <activity android:name=".GroupDetail" />
-        <activity android:name=".GroupsAdd" />
-        <activity android:name=".Login" >
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Groups"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Events"
+            android:screenOrientation="portrait" />
+        <activity android:name=".EventsAdd"
+            android:screenOrientation="portrait" />
+        <activity android:name=".GroupDetail"
+            android:screenOrientation="portrait" />
+        <activity android:name=".GroupsAdd"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Login"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Verified" />
-        <activity android:name=".Account"></activity>
+        <activity android:name=".Account"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".NameInput"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

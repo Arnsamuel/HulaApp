@@ -24,10 +24,19 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_layout_recycler"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/recycler_layout_groups"/>
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginVertical="8dp"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_layout_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/recycler_layout_events"/>
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -1,10 +1,13 @@
 package e.aaronsamuel.hulaapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,14 +20,32 @@ import android.view.MenuItem;
 import android.widget.CalendarView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    RecyclerView ViewEvents;
+    DatabaseReference databaseEvents;
+    DatabaseReference databaseEventsChild;
+    MainRecyclerAdapter mAdapter;
+
+    List<PushEventDb> eventsList;
+
+    private Calendar currSelectedCal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,15 +54,27 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Set database and RecyclerView
+        databaseEvents = FirebaseDatabase.getInstance().getReference("Events");
+        databaseEventsChild = databaseEvents.child("eventId");
+        ViewEvents = findViewById(R.id.recycler_view_layout_recycler);
+        ViewEvents.setLayoutManager(new LinearLayoutManager(this));
+
+        eventsList = new ArrayList<>();
+
+        mAdapter = new MainRecyclerAdapter();
+        ViewEvents.setAdapter(mAdapter);
+
+        // Set FAB uses
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(new Intent(MainActivity.this, EventsAdd.class));
             }
         });
 
+        //set Drawer on activity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -51,6 +84,15 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        SharedPreferences preferences = getSharedPreferences("USERNAME", MODE_PRIVATE);
+        String userName = preferences.getString("username",null);
+
+        if(userName != null) {
+
+            TextView textView = navigationView.getHeaderView(0).findViewById(R.id.userName);
+            textView.setText(userName);
+        }
+
         // SET TITLE BASED ON SELECTED CALENDAR
         final CalendarView calendarView = findViewById(R.id.simpleCalendarView);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -59,20 +101,65 @@ public class MainActivity extends AppCompatActivity
                 TextView textview = findViewById(R.id.titleView);
                 Calendar cal = Calendar.getInstance();
                 cal.set(year, month, dayOfMonth);
-                SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMM");
+
+                currSelectedCal = cal;
+
+                SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMMM dd");
                 textview.setText(sdf.format(cal.getTime()));
+
+                getSelectedDateEvents();
             }
         });
 
-        setupFirebaseDB();
+        // POPULATE RECYCLERVIEW
+        databaseEvents.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                eventsList.clear();
+
+                for(DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                    PushEventDb event = eventSnapshot.getValue(PushEventDb.class);
+                    eventsList.add(event);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });
     }
 
-    public void setupFirebaseDB() {
+    private void getSelectedDateEvents() {
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message");
+        ArrayList<PushEventDb> selectedEvents = new ArrayList();
 
-        myRef.setValue("Hello, World!");
+        for(PushEventDb event : eventsList) {
+
+            String rawDate = event.eventDate;
+
+            SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMMM dd, yyyy");
+            Calendar cal = Calendar.getInstance();
+            try {
+                cal.setTime(sdf.parse(rawDate));
+            }
+            catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            if(cal.get(Calendar.YEAR) == currSelectedCal.get(Calendar.YEAR)
+                    && cal.get(Calendar.MONTH) == currSelectedCal.get(Calendar.MONTH)
+                    && cal.get(Calendar.DAY_OF_MONTH) == currSelectedCal.get(Calendar.DAY_OF_MONTH))
+                selectedEvents.add(event);
+
+            //convert rawDate ke Calendar
+            //compare calendar ama yg selectedEvents
+            //klo sama, add ke selected events
+        }
+
+        mAdapter.setEventsList(selectedEvents);
+        mAdapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -135,4 +222,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }

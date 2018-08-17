@@ -51,6 +51,14 @@
             android:layout_margin="@dimen/text_margin"
             android:text="@string/detail_time"/>
 
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="Click here to pick time"
+            android:clickable="true"/>
+
         <EditText
             android:id="@+id/time_input"
             android:layout_height="wrap_content"
@@ -64,6 +72,12 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:text="@string/detail_location"/>
+
+        <Button
+            android:id="@+id/btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create"/>
 
     </LinearLayout>
 

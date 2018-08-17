@@ -3,6 +3,7 @@ package e.aaronsamuel.hulaapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -25,6 +26,16 @@ public class Login extends AppCompatActivity {
                 new AuthUI.IdpConfig.PhoneBuilder().build()
         );
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null) {
+            Log.e("TAG", "has user " + user.getDisplayName());
+            goToMainScreen();
+            return;
+        } else {
+            Log.e("TAG", "no user ");
+            goToUserInputScreen();
+        }
+
         startActivityForResult(
                 AuthUI.getInstance()
                 .createSignInIntentBuilder()
@@ -32,6 +43,16 @@ public class Login extends AppCompatActivity {
                 .build(),
             RC_SIGN_IN
         );
+    }
+
+    private void goToUserInputScreen() {
+        startActivity(new Intent(Login.this, NameInput.class));
+        finish();
+    }
+
+    private void goToMainScreen() {
+        startActivity(new Intent(Login.this, MainActivity.class));
+        finish();
     }
 
     @Override
@@ -43,9 +64,7 @@ public class Login extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                startActivity(new Intent(Login.this, MainActivity.class));
-                // ...
+                goToMainScreen();
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
