@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Arrays;
 import java.util.List;
 
-public class Login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 123;
 
@@ -46,12 +46,12 @@ public class Login extends AppCompatActivity {
     }
 
     private void goToUserInputScreen() {
-        startActivity(new Intent(Login.this, NameInput.class));
+        startActivity(new Intent(LoginActivity.this, NameInputActivity.class));
         finish();
     }
 
     private void goToMainScreen() {
-        startActivity(new Intent(Login.this, MainActivity.class));
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
         finish();
     }
 

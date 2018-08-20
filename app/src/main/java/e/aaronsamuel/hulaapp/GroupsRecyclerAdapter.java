@@ -12,52 +12,53 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdapter.MyViewHolder> {
 
-    private List<PushEventDb> eventsList;
-    private EventsActivity.EventsCallback callback;
+public class GroupsRecyclerAdapter extends RecyclerView.Adapter<GroupsRecyclerAdapter.MyViewHolder> {
+
+    private List<PushGroupDb> groupList;
+    private GroupsActivity.GroupCallback callback;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, date, time;
+
+        public TextView title;
 
         public MyViewHolder(View view) {
             super(view);
             title = view.findViewById(R.id.title);
-            date = view.findViewById(R.id.date);
-            time = view.findViewById(R.id.time);
         }
     }
 
-
-    public EventRecyclerAdapter(EventsActivity.EventsCallback callback) {
-        this.eventsList = new ArrayList<>();
+    public GroupsRecyclerAdapter(GroupsActivity.GroupCallback callback) {
+        this.groupList = new ArrayList<>();
         this.callback = callback;
     }
 
-    public void setEventsList(List<PushEventDb> eventsList) {
-        this.eventsList.clear();
-        this.eventsList.addAll(eventsList);
+    public void setGroupList(List<PushGroupDb> groupList) {
+        this.groupList.clear();
+        this.groupList.addAll(groupList);
     }
 
-    @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_layout_events, parent, false);
+    public PushGroupDb getData(int position) {
+        return this.groupList.get(position);
+    }
 
+    @NonNull
+    @Override
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_layout_groups, parent,false);
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
-        final PushEventDb events = eventsList.get(position);
-        holder.title.setText(events.getEventTitle());
-        holder.date.setText(events.getEventDate());
-        holder.time.setText(events.getEventTime());
+        final PushGroupDb groups = groupList.get(position);
+        holder.title.setText(groups.getGroupTitle());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view){
                 if(callback != null)
-                    callback.openEventsDetail(events);
+                    callback.onGroupClicked(groups);
             }
         });
 
@@ -66,11 +67,11 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
             public boolean onLongClick(View v) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
-                builder.setMessage("Do you want to delete this Event?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                builder.setMessage("Do you want to delete this group?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if(callback != null)
-                            callback.deleteEvent(events);
+                            callback.onGroupLongClicked(groups);
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
@@ -89,6 +90,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
 
     @Override
     public int getItemCount() {
-        return eventsList.size();
+        return groupList.size();
     }
 }
+

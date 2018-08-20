@@ -7,12 +7,12 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:orientation="vertical"
-    tools:context="e.aaronsamuel.hulaapp.Events">
+    tools:context="e.aaronsamuel.hulaapp.GroupsActivity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_layout_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/recycler_layout_groups"/>
+    android:id="@+id/recycler_view_layout_recycler"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:listitem="@layout/recycler_layout_groups"/>
 
 </LinearLayout>

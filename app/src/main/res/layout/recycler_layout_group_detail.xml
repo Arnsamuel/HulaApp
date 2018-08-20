@@ -15,20 +15,13 @@
         android:src="@android:drawable/sym_def_app_icon"/>
 
     <TextView
-        android:id="@+id/username"
+        android:id="@+id/title"
         android:layout_toRightOf="@id/image_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         android:layout_centerVertical="true"
-        android:textSize="10pt" />
-
-    <CheckBox
-        android:id="@+id/checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        />
+        android:textSize="10pt"
+        android:text="Group Title" />
 
 </RelativeLayout>

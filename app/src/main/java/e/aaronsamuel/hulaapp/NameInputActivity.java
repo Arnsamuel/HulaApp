@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class NameInput extends AppCompatActivity {
+public class NameInputActivity extends AppCompatActivity {
 
     Button btn;
     EditText username;
@@ -38,7 +38,7 @@ public class NameInput extends AppCompatActivity {
                 getName();
 
                 if(data()) {
-                    startActivity(new Intent(NameInput.this,MainActivity.class));
+                    startActivity(new Intent(NameInputActivity.this,MainActivity.class));
                     finish();
                 }
             }
@@ -46,10 +46,14 @@ public class NameInput extends AppCompatActivity {
     }
 
     protected void getName(){
+        FirebaseUser userId = FirebaseAuth.getInstance().getCurrentUser();
+
         String user = username.getText().toString();
+        String id = userId.getUid();
 
         SharedPreferences.Editor editor = getSharedPreferences("USERNAME", MODE_PRIVATE).edit();
         editor.putString("username",user);
+        editor.putString("userid",id);
         editor.commit();
     }
 

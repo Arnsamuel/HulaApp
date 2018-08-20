@@ -20,7 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Events extends AppCompatActivity {
+public class EventsActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     RecyclerView ViewEvents;
@@ -31,6 +31,7 @@ public class Events extends AppCompatActivity {
 
     interface EventsCallback {
         void openEventsDetail(PushEventDb event);
+        void deleteEvent(PushEventDb event);
     }
 
     private EventsCallback callback;
@@ -55,9 +56,13 @@ public class Events extends AppCompatActivity {
         callback = new EventsCallback() {
             @Override
             public void openEventsDetail(PushEventDb event) {
-                Intent intent = new Intent(Events.this, EventDetail.class);
+                Intent intent = new Intent(EventsActivity.this, EventDetailActivity.class);
                 intent.putExtra("EXTRA_EVENT", event);
                 startActivity(intent);
+            }
+
+            public void deleteEvent(PushEventDb event) {
+                databaseEvents.getDatabase().getReference("Events").child(event.eventId).removeValue();
             }
         };
 
@@ -78,6 +83,8 @@ public class Events extends AppCompatActivity {
                     PushEventDb event = eventSnapshot.getValue(PushEventDb.class);
 
                     String dbUserName = event.eventCreator;
+
+
 
                     if (userName.equals(dbUserName))
                         eventsList.add(event);
@@ -102,7 +109,7 @@ public class Events extends AppCompatActivity {
 
         switch(item.getItemId()) {
             case R.id.menu_add:
-                Intent intent = new Intent(this, EventsAdd.class);
+                Intent intent = new Intent(this, EventsAddActivity.class);
                 startActivity(intent);
         }
 

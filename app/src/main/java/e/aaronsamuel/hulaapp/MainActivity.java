@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -17,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.TextView;
 
@@ -26,13 +26,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -40,10 +37,10 @@ public class MainActivity extends AppCompatActivity
 
     RecyclerView ViewEvents;
     DatabaseReference databaseEvents;
-    DatabaseReference databaseEventsChild;
     MainRecyclerAdapter mAdapter;
 
     List<PushEventDb> eventsList;
+    List<PushEventDb> filteredEventList;
 
     private Calendar currSelectedCal;
 
@@ -56,11 +53,11 @@ public class MainActivity extends AppCompatActivity
 
         // Set database and RecyclerView
         databaseEvents = FirebaseDatabase.getInstance().getReference("Events");
-        databaseEventsChild = databaseEvents.child("eventId");
         ViewEvents = findViewById(R.id.recycler_view_layout_recycler);
         ViewEvents.setLayoutManager(new LinearLayoutManager(this));
 
         eventsList = new ArrayList<>();
+        filteredEventList = new ArrayList<>();
 
         mAdapter = new MainRecyclerAdapter();
         ViewEvents.setAdapter(mAdapter);
@@ -70,7 +67,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, EventsAdd.class));
+                startActivity(new Intent(MainActivity.this, EventsAddActivity.class));
             }
         });
 
@@ -123,6 +120,8 @@ public class MainActivity extends AppCompatActivity
                     PushEventDb event = eventSnapshot.getValue(PushEventDb.class);
                     eventsList.add(event);
                 }
+
+                filterEvents();
             }
 
             @Override
@@ -130,11 +129,32 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    private void filterEvents() {
+
+        for(PushEventDb event : eventsList) {
+
+            if(event.eventGroup != null && event.eventGroup.groupMember != null) {
+
+                SharedPreferences preferences = getSharedPreferences("USERNAME", MODE_PRIVATE);
+                String userId = preferences.getString("userid",null);
+
+                if(userId.equals(event.eventCreatorId))
+                    filteredEventList.add(event);
+                else {
+                    PushUserDb currentUser = new PushUserDb(userId);
+
+                    if(event.eventGroup.groupMember.contains(currentUser))
+                        filteredEventList.add(event);
+                }
+            }
+        }
+    }
+
     private void getSelectedDateEvents() {
 
         ArrayList<PushEventDb> selectedEvents = new ArrayList();
 
-        for(PushEventDb event : eventsList) {
+        for(PushEventDb event : filteredEventList) {
 
             String rawDate = event.eventDate;
 
@@ -193,7 +213,7 @@ public class MainActivity extends AppCompatActivity
 
         switch(item.getItemId()) {
             case R.id.menu_login:
-                Intent intent = new Intent(this, Login.class);
+                Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
         }
 
@@ -207,10 +227,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_groups) {
-            Intent intent = new Intent(this, Groups.class);
+            Intent intent = new Intent(this, GroupsActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_events) {
-            Intent intent = new Intent(this, Events.class);
+            Intent intent = new Intent(this, EventsActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_favorites) {
 
@@ -218,7 +238,7 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

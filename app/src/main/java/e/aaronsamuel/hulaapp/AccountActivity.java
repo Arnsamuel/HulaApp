@@ -3,11 +3,13 @@ package e.aaronsamuel.hulaapp;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class GroupDetail extends AppCompatActivity {
+import e.aaronsamuel.hulaapp.R;
+
+public class AccountActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_group_detail);
+        setContentView(R.layout.activity_account);
     }
 }

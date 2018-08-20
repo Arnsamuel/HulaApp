@@ -17,23 +17,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".EventDetail"
+            android:name=".EventDetailActivity"
             android:label="@string/title_activity_event_detail"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Groups"
+        <activity android:name=".GroupsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Events"
+        <activity android:name=".EventsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".EventsAdd"
+        <activity android:name=".EventsAddActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".GroupDetail"
+        <activity android:name=".GroupDetailActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".GroupsAdd"
+        <activity android:name=".GroupsAddActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Login"
+        <activity android:name=".LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,9 +41,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Account"
+        <activity android:name=".AccountActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".NameInput"
+        <activity android:name=".NameInputActivity"
             android:screenOrientation="portrait"/>
     </application>
 
