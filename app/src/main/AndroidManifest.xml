@@ -21,19 +21,26 @@
             android:label="@string/title_activity_event_detail"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".GroupsActivity"
+        <activity
+            android:name=".GroupsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".EventsActivity"
+        <activity
+            android:name=".EventsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".EventsAddActivity"
+        <activity
+            android:name=".EventsAddActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".GroupDetailActivity"
+        <activity
+            android:name=".GroupDetailActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".GroupsAddActivity"
+        <activity
+            android:name=".GroupsAddActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".LoginActivity"
+        <activity
+            android:name=".LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,10 +48,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AccountActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".NameInputActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".AccountActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".UserInputActivity"
+            android:screenOrientation="portrait" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBidzDYDhPU5fPFh22QRjyjpTlN597sql0" />
+
+        <activity android:name=".EventEditActivity"></activity>
     </application>
 
 </manifest>

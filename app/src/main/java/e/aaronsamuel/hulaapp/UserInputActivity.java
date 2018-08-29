@@ -3,10 +3,8 @@ package e.aaronsamuel.hulaapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,26 +17,20 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import e.aaronsamuel.hulaapp.R;
-
-public class AccountActivity extends AppCompatActivity {
+public class UserInputActivity extends AppCompatActivity {
 
     Button btn;
     EditText username;
     ImageView profilepic;
 
     String encoded;
-    String picCode;
     int GET_FROM_GALLERY;
 
     DatabaseReference databaseUser;
@@ -46,43 +38,12 @@ public class AccountActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_account);
-
-        SharedPreferences preferences = getSharedPreferences("USERNAME", MODE_PRIVATE);
-        String userName = preferences.getString("username",null);
-        final String userId = preferences.getString("userid",null);
+        setContentView(R.layout.activity_user_input);
 
         databaseUser = FirebaseDatabase.getInstance().getReference("Users");
 
         username = findViewById(R.id.username);
         profilepic = findViewById(R.id.image_view);
-
-        //GET PROFILE PIC BASE64 FROM DB
-        databaseUser.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                picCode = dataSnapshot.child(userId).child("profilepic").getValue(String.class);
-
-                //SET PROFILE PICTURE INSIDE DRAWER
-                if (!TextUtils.isEmpty(picCode)) {
-                    ImageView imageView = findViewById(R.id.image_view);
-                    try {
-                        byte[] data = Base64.decode(picCode, Base64.DEFAULT);
-                        Bitmap decodedByte = BitmapFactory.decodeByteArray(data, 0, data.length);
-
-                        imageView.setImageBitmap(decodedByte);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
 
         profilepic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,10 +58,26 @@ public class AccountActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                data();
-                startActivity(new Intent(AccountActivity.this, MainActivity.class));
+                getName();
+
+                if(data()) {
+                    startActivity(new Intent(UserInputActivity.this,MainActivity.class));
+                    finish();
+                }
             }
         });
+    }
+
+    protected void getName(){
+        FirebaseUser userId = FirebaseAuth.getInstance().getCurrentUser();
+
+        String user = username.getText().toString();
+        String id = userId.getUid();
+
+        SharedPreferences.Editor editor = getSharedPreferences("USERNAME", MODE_PRIVATE).edit();
+        editor.putString("username",user);
+        editor.putString("userid",id);
+        editor.commit();
     }
 
     private boolean data(){
@@ -138,7 +115,7 @@ public class AccountActivity extends AppCompatActivity {
                 profilepic.setImageBitmap(bitmap);
 
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                bitmap.compress(Bitmap.CompressFormat.WEBP, 50, byteArrayOutputStream);
                 byte[] byteArray = byteArrayOutputStream .toByteArray();
 
                 encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);

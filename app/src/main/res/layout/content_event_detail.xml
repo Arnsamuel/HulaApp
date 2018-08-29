@@ -26,52 +26,93 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/text_margin"
+                android:drawableStart="@drawable/icon_account_24"
+                android:drawablePadding="16dp"
                 android:text="@string/detail_creator_name"/>
 
             <TextView
                 android:id="@+id/creator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/text_margin"/>
+                android:layout_margin="@dimen/text_margin"
+                android:paddingLeft="33dp"
+                android:textSize="16sp"
+                android:textColor="@color/colorDarkGray"
+                android:hint="creator"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/text_margin"
+                android:drawableStart="@drawable/icon_calendar_24"
+                android:drawablePadding="16dp"
+                android:text="@string/detail_participant"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_layout_recycler_attend"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/text_margin"
+                android:paddingLeft="33dp"
+                tools:listitem="@layout/recycler_layout_attend"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:drawableStart="@drawable/icon_calendar_24"
+                android:drawablePadding="16dp"
                 android:text="@string/detail_date"/>
 
             <TextView
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/text_margin"/>
+                android:layout_margin="@dimen/text_margin"
+                android:paddingLeft="33dp"
+                android:textSize="16sp"
+                android:textColor="@color/colorDarkGray"
+                android:hint="date"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/text_margin"
+                android:drawableStart="@drawable/icon_stopwatch_24"
+                android:drawablePadding="16dp"
                 android:text="@string/detail_time"/>
 
             <TextView
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/text_margin"/>
+                android:layout_margin="@dimen/text_margin"
+                android:paddingLeft="33dp"
+                android:textSize="16sp"
+                android:textColor="@color/colorDarkGray"
+                android:hint="time"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/text_margin"
+                android:drawableStart="@drawable/icon_marker_24"
+                android:drawablePadding="16dp"
                 android:text="@string/detail_location"/>
 
             <TextView
+                android:id="@+id/location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/text_margin"
-                android:text="@string/event_choices_prompt" />
+                android:paddingLeft="33dp"
+                android:textSize="16sp"
+                android:textColor="@color/colorDarkGray"
+                android:hint="location"/>
 
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
+
 
 </LinearLayout>

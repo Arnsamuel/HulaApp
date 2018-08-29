@@ -71,19 +71,19 @@
             android:text="Click here to pick time"
             android:clickable="true"/>
 
-        <EditText
-            android:id="@+id/time_input"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_margin="@dimen/text_margin"
-            android:inputType="text"
-            android:text="Test"/>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:text="@string/detail_location"/>
+
+        <TextView
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="Click here to pick location"
+            android:clickable="true"/>
 
         <Button
             android:id="@+id/btn"

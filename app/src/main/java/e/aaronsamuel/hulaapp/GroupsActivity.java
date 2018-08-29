@@ -72,7 +72,7 @@ public class GroupsActivity extends AppCompatActivity {
             }
         };
 
-        mAdapter = new GroupsRecyclerAdapter(callback);
+        mAdapter = new GroupsRecyclerAdapter(callback, this);
 
         groupsDatabase = FirebaseDatabase.getInstance().getReference("Groups");
         ViewGroups = findViewById(R.id.recycler_view_layout_recycler);

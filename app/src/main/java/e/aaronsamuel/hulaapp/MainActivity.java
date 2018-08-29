@@ -2,11 +2,16 @@ package e.aaronsamuel.hulaapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Base64;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,8 +23,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,35 +50,25 @@ public class MainActivity extends AppCompatActivity
 
     List<PushEventDb> eventsList;
     List<PushEventDb> filteredEventList;
+    String picCode;
 
     private Calendar currSelectedCal;
+
+    DatabaseReference databaseUser;
+
+    interface EventsCallback {
+        void openMainDetail(PushEventDb event);
+    }
+
+    private MainActivity.EventsCallback callback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        // Set database and RecyclerView
-        databaseEvents = FirebaseDatabase.getInstance().getReference("Events");
-        ViewEvents = findViewById(R.id.recycler_view_layout_recycler);
-        ViewEvents.setLayoutManager(new LinearLayoutManager(this));
-
-        eventsList = new ArrayList<>();
-        filteredEventList = new ArrayList<>();
-
-        mAdapter = new MainRecyclerAdapter();
-        ViewEvents.setAdapter(mAdapter);
-
-        // Set FAB uses
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, EventsAddActivity.class));
-            }
-        });
 
         //set Drawer on activity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -81,14 +80,80 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // Set FAB uses
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, EventsAddActivity.class));
+            }
+        });
+
         SharedPreferences preferences = getSharedPreferences("USERNAME", MODE_PRIVATE);
         String userName = preferences.getString("username",null);
+        final String userId = preferences.getString("userid",null);
+
+        callback = new MainActivity.EventsCallback() {
+            @Override
+            public void openMainDetail(PushEventDb event) {
+                Intent intent = new Intent(MainActivity.this, EventDetailActivity.class);
+                intent.putExtra("EXTRA_EVENT", event);
+                startActivity(intent);
+            }
+        };
+
+        databaseUser = FirebaseDatabase.getInstance().getReference("Users");
+
+        // Set database and RecyclerView
+        databaseEvents = FirebaseDatabase.getInstance().getReference("Events");
+        ViewEvents = findViewById(R.id.recycler_view_layout_recycler);
+        ViewEvents.setLayoutManager(new LinearLayoutManager(this));
+
+        eventsList = new ArrayList<>();
+        filteredEventList = new ArrayList<>();
+
+        mAdapter = new MainRecyclerAdapter(callback, this);
+        ViewEvents.setAdapter(mAdapter);
 
         if(userName != null) {
-
             TextView textView = navigationView.getHeaderView(0).findViewById(R.id.userName);
             textView.setText(userName);
+
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(MainActivity.this, AccountActivity.class));
+                }
+            });
         }
+
+
+        //GET PROFILE PIC BASE64 FROM DB
+        databaseUser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                picCode = dataSnapshot.child(userId).child("profilepic").getValue(String.class);
+
+                //SET PROFILE PICTURE INSIDE DRAWER
+                if(!TextUtils.isEmpty(picCode)) {
+                    ImageView imageView = findViewById(R.id.imageView);
+                    try {
+                        byte[] data = Base64.decode(picCode, Base64.DEFAULT);
+                        Bitmap decodedByte = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+                        imageView.setImageBitmap(decodedByte);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
 
         // SET TITLE BASED ON SELECTED CALENDAR
         final CalendarView calendarView = findViewById(R.id.simpleCalendarView);
@@ -108,7 +173,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        // POPULATE RECYCLERVIEW
+       // POPULATE RECYCLERVIEW
         databaseEvents.addValueEventListener(new ValueEventListener() {
 
             @Override
@@ -171,10 +236,6 @@ public class MainActivity extends AppCompatActivity
                     && cal.get(Calendar.MONTH) == currSelectedCal.get(Calendar.MONTH)
                     && cal.get(Calendar.DAY_OF_MONTH) == currSelectedCal.get(Calendar.DAY_OF_MONTH))
                 selectedEvents.add(event);
-
-            //convert rawDate ke Calendar
-            //compare calendar ama yg selectedEvents
-            //klo sama, add ke selected events
         }
 
         mAdapter.setEventsList(selectedEvents);
@@ -199,27 +260,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        switch(item.getItemId()) {
-            case R.id.menu_login:
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -232,10 +272,13 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_events) {
             Intent intent = new Intent(this, EventsActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_favorites) {
-
-        } else if (id == R.id.nav_settings) {
-
+        } else if (id == R.id.nav_signout) {
+            AuthUI.getInstance().signOut(this).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    System.exit(1);
+                }
+            });
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

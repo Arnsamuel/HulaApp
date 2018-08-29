@@ -50,7 +50,7 @@ public class ContactRecyclerAdapter extends RecyclerView.Adapter<ContactRecycler
         this.contactList.addAll(contactList);
 
         for(int i = 0; i < contactList.size(); i++) {
-            checkBoxStatus.add(false);
+            checkBoxStatus.add(true);
         }
     }
 

@@ -14,6 +14,7 @@
     <string name="event_choices_prompt">Are you coming?</string>
     <string name="detail_event_title">Event Title</string>
     <string name="detail_creator_name">Creator Name</string>
+    <string name="detail_participant">Participants</string>
     <string name="detail_date">Date</string>
     <string name="detail_time">Time</string>
     <string name="detail_location">Location</string>

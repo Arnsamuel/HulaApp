@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void goToUserInputScreen() {
-        startActivity(new Intent(LoginActivity.this, NameInputActivity.class));
+        startActivity(new Intent(LoginActivity.this, UserInputActivity.class));
         finish();
     }
 

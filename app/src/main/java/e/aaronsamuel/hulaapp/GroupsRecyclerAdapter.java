@@ -1,7 +1,9 @@
 package e.aaronsamuel.hulaapp;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,11 +14,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
 
 public class GroupsRecyclerAdapter extends RecyclerView.Adapter<GroupsRecyclerAdapter.MyViewHolder> {
 
     private List<PushGroupDb> groupList;
     private GroupsActivity.GroupCallback callback;
+
+    String userId;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -28,9 +33,12 @@ public class GroupsRecyclerAdapter extends RecyclerView.Adapter<GroupsRecyclerAd
         }
     }
 
-    public GroupsRecyclerAdapter(GroupsActivity.GroupCallback callback) {
+    public GroupsRecyclerAdapter(GroupsActivity.GroupCallback callback, Context context) {
         this.groupList = new ArrayList<>();
         this.callback = callback;
+
+        SharedPreferences preferences = context.getSharedPreferences("USERNAME", MODE_PRIVATE);
+        userId = preferences.getString("userid",null);
     }
 
     public void setGroupList(List<PushGroupDb> groupList) {
@@ -62,30 +70,33 @@ public class GroupsRecyclerAdapter extends RecyclerView.Adapter<GroupsRecyclerAd
             }
         });
 
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
+        if(userId == groups.groupCreatorId) {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
-                builder.setMessage("Do you want to delete this group?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if(callback != null)
-                            callback.onGroupLongClicked(groups);
-                    }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
 
-                AlertDialog alert = builder.create();
-                alert.show();
-                return true;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
+                    builder.setMessage("Do you want to delete this group?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(callback != null)
+                                callback.onGroupLongClicked(groups);
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
 
-            }
-        });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                    return true;
+
+                }
+            });
+        }
     }
 
     @Override

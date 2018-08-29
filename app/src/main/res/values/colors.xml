@@ -5,4 +5,5 @@
     <color name="colorPrimaryBlueLight">#26c6da</color>
     <color name="colorPrimaryWhite">#F5F5F5</color>
     <color name="colorPrimaryWhiteDark">#e0e0e0</color>
+    <color name="colorDarkGray">#212121</color>
 </resources>

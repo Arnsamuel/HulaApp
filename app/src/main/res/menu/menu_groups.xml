@@ -4,16 +4,4 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="e.aaronsamuel.hulaapp.GroupsActivity">
 
-    <item
-        android:id="@+id/menu_add"
-        android:icon="@mipmap/ic_launcher"
-        android:title="@string/action_settings"
-        app:showAsAction="always" />
-
-    <item
-        android:id="@+id/menu_contact"
-        android:icon="@mipmap/ic_launcher"
-        android:title="@string/action_settings"
-        app:showAsAction="always" />
-
 </menu>

@@ -9,6 +9,8 @@ import java.io.Serializable;
 public class PushUserDb implements Parcelable {
     String userId;
     String name;
+    String profilepic;
+    boolean attending;
 
     public PushUserDb() {
     }
@@ -43,14 +45,16 @@ public class PushUserDb implements Parcelable {
         this.userId = userId;
     }
 
-    PushUserDb(String userId, String name) {
+    PushUserDb(String userId, String name, String profilepic) {
         this.userId = userId;
         this.name = name;
+        this.profilepic = profilepic;
     }
 
      PushUserDb(Parcel parcel) {
         userId = parcel.readString();
         name = parcel.readString();
+        profilepic = parcel.readString();
     }
 
     @Override
@@ -62,6 +66,7 @@ public class PushUserDb implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(userId);
         dest.writeString(name);
+        dest.writeString(profilepic);
     }
 
     public static final Creator<PushUserDb> CREATOR = new Creator<PushUserDb>() {
@@ -83,5 +88,9 @@ public class PushUserDb implements Parcelable {
 
     public String getName() {
         return name;
+    }
+
+    public String getProfilepic() {
+        return profilepic;
     }
 }

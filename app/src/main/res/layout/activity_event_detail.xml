@@ -38,27 +38,56 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryBlue"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+
+        android:background="@color/colorPrimaryWhiteDark">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/choice_text_margin"
+        android:text="Are you coming to this event?"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_gravity="bottom">
+        android:gravity="right"
+        >
 
         <Button
             style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/btnno"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="button 1" />
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/choice_button_margin"
+            android:textSize="14sp"
+            android:textColor="@color/colorDarkGray"
+            android:text="No" />
 
         <Button
             style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/btnmaybe"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button 2" />
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/choice_button_margin"
+            android:textSize="14sp"
+            android:textColor="@color/colorDarkGray"
+            android:text="Maybe" />
 
         <Button
             style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/btnyes"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button 3" />
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/choice_button_margin"
+            android:background="@color/colorPrimaryWhite"
+            android:textSize="14sp"
+            android:textColor="@color/colorDarkGray"
+            android:text="Yes" />
+
+    </LinearLayout>
 
     </LinearLayout>
 

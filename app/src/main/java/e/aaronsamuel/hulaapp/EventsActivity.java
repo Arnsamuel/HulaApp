@@ -31,6 +31,7 @@ public class EventsActivity extends AppCompatActivity {
 
     interface EventsCallback {
         void openEventsDetail(PushEventDb event);
+        void openEditEvent(PushEventDb event);
         void deleteEvent(PushEventDb event);
     }
 
@@ -61,12 +62,19 @@ public class EventsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
 
+            @Override
+            public void openEditEvent(PushEventDb event) {
+                Intent intent = new Intent(EventsActivity.this, EventEditActivity.class);
+                intent.putExtra("EXTRA_EVENT", event);
+                startActivity(intent);
+            }
+
             public void deleteEvent(PushEventDb event) {
                 databaseEvents.getDatabase().getReference("Events").child(event.eventId).removeValue();
             }
         };
 
-        mAdapter = new EventRecyclerAdapter(callback);
+        mAdapter = new EventRecyclerAdapter(callback, this);
         ViewEvents.setLayoutManager(new LinearLayoutManager(this));
         ViewEvents.setAdapter(mAdapter);
 

@@ -10,8 +10,8 @@
     android:layout_margin="@dimen/text_margin">
 
     <ImageView android:id="@+id/image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:src="@android:drawable/sym_def_app_icon"/>
 
     <TextView
@@ -21,7 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         android:layout_centerVertical="true"
-        android:textSize="10pt"
+        android:textSize="16sp"
+        android:textColor="@color/colorDarkGray"
         android:text="Group Title" />
 
 </RelativeLayout>

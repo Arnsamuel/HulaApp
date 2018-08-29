@@ -1,5 +1,6 @@
 package e.aaronsamuel.hulaapp;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import java.util.List;
 public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapter.MyViewHolder> {
 
     private List<PushEventDb> eventsList;
+    private MainActivity.EventsCallback callback;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title, creator, time;
@@ -25,8 +27,9 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
         }
     }
 
-    public MainRecyclerAdapter() {
+    public MainRecyclerAdapter(MainActivity.EventsCallback callback, Context context) {
         this.eventsList = new ArrayList<>();
+        this.callback = callback;
     }
 
     public void setEventsList(List<PushEventDb> eventsList) {
@@ -43,10 +46,18 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        PushEventDb events = eventsList.get(position);
+        final PushEventDb events = eventsList.get(position);
         holder.title.setText(events.getEventTitle());
         holder.creator.setText(events.getEventCreator());
         holder.time.setText(events.getEventTime());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(callback != null)
+                    callback.openMainDetail(events);
+            }
+        });
     }
 
     @Override

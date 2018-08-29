@@ -54,6 +54,7 @@ public class GroupsAddActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 data();
+                startActivity(new Intent(GroupsAddActivity.this, MainActivity.class));
             }
         });
 
@@ -116,7 +117,7 @@ public class GroupsAddActivity extends AppCompatActivity {
 
             databaseGroups.child(id).setValue(pushGroup);
 
-            Toast.makeText(this, "Event Added",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Group Created",Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "Please Complete all field",Toast.LENGTH_LONG).show();
         }

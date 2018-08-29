@@ -18,15 +18,11 @@
 
     <group android:checkableBehavior="single"
         android:id="@+id/sectiontwo">
-            <item
-                android:id="@+id/nav_favorites"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Favorites" />
 
             <item
-                android:id="@+id/nav_settings"
+                android:id="@+id/nav_signout"
                 android:icon="@drawable/ic_menu_manage"
-                android:title="Settings" />
+                android:title="Sign Out" />
     </group>
 
 
