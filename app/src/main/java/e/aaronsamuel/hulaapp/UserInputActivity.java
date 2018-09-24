@@ -1,8 +1,11 @@
 package e.aaronsamuel.hulaapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +42,8 @@ public class UserInputActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_input);
+
+        isNetworkAvailable();
 
         databaseUser = FirebaseDatabase.getInstance().getReference("Users");
 
@@ -115,7 +120,7 @@ public class UserInputActivity extends AppCompatActivity {
                 profilepic.setImageBitmap(bitmap);
 
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.WEBP, 50, byteArrayOutputStream);
+                bitmap.compress(Bitmap.CompressFormat.WEBP, 25, byteArrayOutputStream);
                 byte[] byteArray = byteArrayOutputStream .toByteArray();
 
                 encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
@@ -126,5 +131,12 @@ public class UserInputActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
